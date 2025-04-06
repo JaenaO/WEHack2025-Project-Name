@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-const Vesty = ({ mood }) => {
-  const [isExpanded, setIsExpanded] = useState(false); // State to track if Vesty is expanded
-
+const Vesty = ({ mood, message, explanation }) => {
   const moodImages = {
     happy: '/vestyHappy.gif',
     excited: '/vestyExcited.jpeg',
@@ -11,70 +9,37 @@ const Vesty = ({ mood }) => {
     shocked: '/vestyShocked.jpeg',
   };
 
-  const moodExplanations = {
-    happy: 'Vesty is happy because this investment is performing well!',
-    excited: 'Vesty is excited about the potential of this investment!',
-    worried: 'Vesty is worried because this investment is risky.',
-    thinking: 'Vesty is thinking about whether this investment is a good choice.',
-    shocked: 'Vesty is shocked by unexpected changes in the investment!',
-  };
-
-  const toggleExpand = () => {
-    setIsExpanded((prev) => !prev); // Toggle the expanded state
-  };
-
   return (
-    <div style={isExpanded ? styles.expandedContainer : styles.container} onClick={toggleExpand}>
+    <div style={styles.container}>
+      <p style={styles.message}>{message}</p> {/* Move the message above the image */}
       <img
         src={moodImages[mood] || moodImages.happy} // Default to happy if no mood is provided
         alt={`Vesty is ${mood}`}
-        style={isExpanded ? styles.expandedImage : styles.image}
+        style={styles.image} // Use the default image style
       />
-      {isExpanded && (
-        <div style={styles.explanation}>
-          <h2>Why is Vesty feeling {mood}?</h2>
-          <p>{moodExplanations[mood] || 'Vesty is feeling neutral.'}</p>
-        </div>
-      )}
+      {explanation && <p style={styles.explanation}>{explanation}</p>}
     </div>
   );
 };
 
 const styles = {
   container: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'flex-end', // Align the image to the bottom of the container
-    height: '100%', // Ensure the container takes up the full height of its parent
     textAlign: 'center',
-    cursor: 'pointer', // Indicate that Vesty is clickable
-  },
-  expandedContainer: {
-    display: 'flex',
-    justifyContent: 'space-between', // Space between Vesty and the explanation
-    alignItems: 'center',
-    height: '100%', // Take up the full height of the parent
-    padding: '20px',
-    cursor: 'pointer', // Indicate that Vesty is clickable
   },
   image: {
-    width: 'auto', // Maintain aspect ratio
-    height: '80%', // Make the image take up 80% of the container's height
-    maxHeight: '400px', // Set a maximum height to prevent it from getting too large
-    objectFit: 'contain', // Ensure the image scales properly
+    width: '300px', // Adjust the width
+    height: '300px', // Adjust the height
   },
-  expandedImage: {
-    width: '50%', // Take up half the screen width
-    height: 'auto', // Maintain aspect ratio
-    maxHeight: '90%', // Prevent the image from getting too large
-    objectFit: 'contain', // Ensure the image scales properly
-  },
-  explanation: {
-    flex: 1, // Take up the remaining space
-    marginLeft: '20px',
-    textAlign: 'left',
+  message: {
     fontSize: '1.2rem',
     color: '#333',
+    marginBottom: '10px', // Add spacing below the message
+    fontWeight: 'bold', // Make the text bold
+  },
+  explanation: {
+    fontSize: '1rem',
+    color: '#555',
+    marginTop: '10px',
   },
 };
 

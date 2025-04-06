@@ -3,6 +3,8 @@ import Vesty from '../components/Vesty';
 
 const Tamagotchi = () => {
   const [vestyMood, setVestyMood] = useState('happy'); // Initial mood is 'happy'
+  const [vestyMessage, setVestyMessage] = useState(''); // Vesty's message
+  const [vestyExplanation, setVestyExplanation] = useState(''); // Vesty's explanation
   const [selectedInvestment, setSelectedInvestment] = useState(null); // Track the selected investment
 
   const investments = [
@@ -12,7 +14,6 @@ const Tamagotchi = () => {
     { id: 4, name: 'Risky Venture', returnRate: -5, quality: 'bad' },
     { id: 5, name: 'Crypto Fund', returnRate: 20, quality: 'good' },
     { id: 6, name: 'High-Risk Stocks', returnRate: -10, quality: 'bad' },
-    // Add more investments as needed
   ];
 
   const handleMouseOver = (quality) => {
@@ -25,17 +26,22 @@ const Tamagotchi = () => {
   const handleMouseOut = () => {
     if (!selectedInvestment) {
       setVestyMood('happy'); // Reset Vesty's mood when the mouse leaves and no investment is selected
+      setVestyMessage('Shall we check up on our investments?');
+      setVestyExplanation('');
     }
   };
 
   const handleInvestmentClick = (investment) => {
     setSelectedInvestment(investment); // Save the selected investment
     updateMood(investment.quality); // Update Vesty's mood based on the selected investment
+    updateMessageAndExplanation(investment); // Update Vesty's message and explanation
   };
 
   const handleInvestmentDoubleClick = () => {
     setSelectedInvestment(null); // Clear the selected investment
     setVestyMood('neutral'); // Reset Vesty's mood to neutral
+    setVestyMessage('Select an investment to see how I feel about it!');
+    setVestyExplanation('');
   };
 
   const updateMood = (quality) => {
@@ -48,11 +54,30 @@ const Tamagotchi = () => {
     }
   };
 
+  const updateMessageAndExplanation = (investment) => {
+    if (investment.quality === 'good') {
+      setVestyMessage(`I'm excited about ${investment.name}!`);
+      setVestyExplanation(
+        `${investment.name} has a promising return rate of ${investment.returnRate}%. It looks like a solid investment opportunity!`
+      );
+    } else if (investment.quality === 'bad') {
+      setVestyMessage(`I'm worried about ${investment.name}.`);
+      setVestyExplanation(
+        `${investment.name} has a negative return rate of ${investment.returnRate}%. This might not be a wise investment.`
+      );
+    } else {
+      setVestyMessage(`I'm thinking about ${investment.name}.`);
+      setVestyExplanation(
+        `${investment.name} has a moderate return rate of ${investment.returnRate}%. It could go either way, so proceed with caution.`
+      );
+    }
+  };
+
   return (
     <div style={styles.container}>
       {/* Vesty Section */}
       <section style={styles.vestySection}>
-        <Vesty mood={vestyMood} />
+        <Vesty mood={vestyMood} message={vestyMessage} explanation={vestyExplanation} />
       </section>
 
       {/* Investment Section */}
@@ -88,18 +113,18 @@ const styles = {
   },
   vestySection: {
     position: 'fixed',
-    top: '60px', // Push below the header
+    top: '70px',
     left: 0,
     width: '100%',
-    height: 'calc(50% - 60px)', // Adjust height to account for the header
+    height: 'calc(50% - 60px)',
     backgroundColor: '#f9f9f9',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     borderBottom: '2px solid #ddd',
-    zIndex: 10, // Ensure it stays above the scrolling section
-    overflow: 'hidden', // Prevent Vesty from moving outside the section
+    zIndex: 10,
+    overflow: 'hidden',
   },
   investmentSection: {
     position: 'absolute',
@@ -112,11 +137,6 @@ const styles = {
     padding: '2%',
     borderTop: '2px solid #ddd',
     boxSizing: 'border-box', // Ensure padding doesn't affect width/height
-  },
-  header: {
-    fontSize: '2rem',
-    color: '#4CAF50',
-    marginBottom: '10px',
   },
   subHeader: {
     fontSize: '1.5rem',
