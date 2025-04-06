@@ -1,4 +1,4 @@
-import Navbar from "../components/Navbar";
+
 
 const Investment = () => {
   const opportunities = [
@@ -25,8 +25,10 @@ const Investment = () => {
 
 const styles = {
   container: {
-    padding: '20px',
     fontFamily: 'Arial, sans-serif',
+    height: '100vh',
+    padding: '60px',
+    overflow: 'hidden', // Prevent scrolling on the entire page
   },
   header: {
     textAlign: 'center',

@@ -1,5 +1,3 @@
-import Navbar from "../components/Navbar";
-
 const About = () => {
   return (
     <div style={styles.container}>
@@ -19,9 +17,10 @@ const About = () => {
 
 const styles = {
   container: {
-    padding: '20px',
     fontFamily: 'Arial, sans-serif',
-    lineHeight: '1.6',
+    height: '100vh',
+    padding: '60px',
+    overflow: 'hidden', // Prevent scrolling on the entire page
   },
   header: {
     textAlign: 'center',

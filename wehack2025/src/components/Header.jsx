@@ -9,7 +9,7 @@ const Header = () => {
 
       {/* Right Section: Profile Picture and Login/Sign Up */}
       <div style={styles.rightSection}>
-        <img src="/temp-profile.png" alt="Profile" style={styles.profilePicture} />
+        <img src="/defaultpp.jpeg" alt="Profile" style={styles.profilePicture} />
         <button style={styles.authButton}>Login</button>
         <button style={styles.authButton}>Sign Up</button>
       </div>
@@ -26,6 +26,11 @@ const styles = {
     backgroundColor: '#4CAF50',
     color: 'white',
     boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+    position: 'fixed',
+    width: '100%', // Ensure it spans the full width
+    zIndex: 1000, // Ensure it stays above other elements
+    top: 0,
+    left: 0,
   },
   leftSection: {
     display: 'flex',
@@ -60,9 +65,6 @@ const styles = {
     cursor: 'pointer',
     fontWeight: 'bold',
     transition: 'background-color 0.3s ease',
-  },
-  authButtonHover: {
-    backgroundColor: '#ddd',
   },
 };
 

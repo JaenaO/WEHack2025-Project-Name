@@ -1,5 +1,3 @@
-import Navbar from "../components/Navbar";
-
 const Profile = () => {
   const user = {
     name: 'Jane Doe',
@@ -21,8 +19,10 @@ const Profile = () => {
 
 const styles = {
   container: {
-    padding: '20px',
     fontFamily: 'Arial, sans-serif',
+    height: '100vh',
+    padding: '60px',
+    overflow: 'hidden', // Prevent scrolling on the entire page
   },
   header: {
     textAlign: 'center',
