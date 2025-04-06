@@ -15,9 +15,13 @@ const Investment = () => {
       name: 'DVDPlay',
       description: 'Automated DVD rental kiosks for convenience and accessibility.',
       returnRate: '7% annually',
+      riskLevel: 'Low-Medium',
+      fundingTotal: 20000000,
+      fundingRounds: 1,
+      market: 'Entertainment',
+      foundedYear: 1999,
       funding_total_usd: 20000000,
       funding_rounds: 1,
-      market: 'Entertainment',
       founded_year: 1999,
     },
     {
@@ -25,9 +29,13 @@ const Investment = () => {
       name: 'Veracyte',
       description: 'Innovative diagnostic solutions in the healthcare industry.',
       returnRate: '12% annually',
+      riskLevel: 'High',
+      fundingTotal: 1234,
+      fundingRounds: 1,
+      market: 'Health Care',
+      foundedYear: 2006,
       funding_total_usd: 1234,
       funding_rounds: 1,
-      market: 'Health Care',
       founded_year: 2006,
     },
     {
@@ -35,9 +43,13 @@ const Investment = () => {
       name: 'Fox Networks',
       description: 'VR gaming platform with social integration features.',
       returnRate: '22% annually (potential)',
+      riskLevel: 'Medium',
+      fundingTotal: 4912393,
+      fundingRounds: 1,
+      market: 'Advertising',
+      foundedYear: 2007,
       funding_total_usd: 4912393,
       funding_rounds: 1,
-      market: 'Advertising',
       founded_year: 2007,
     },
   ];
@@ -96,36 +108,80 @@ const Investment = () => {
     setIsExplanationExpanded(!isExplanationExpanded); // Toggle explanation visibility
   };
 
+  const getRiskColor = (riskLevel) => {
+    if (riskLevel === 'Low' || riskLevel === 'Low-Medium') return '#4CAF50';
+    if (riskLevel === 'Medium') return '#FF9800';
+    return '#F44336';
+  };
+
   return (
     <div style={styles.container}>
-      <h1 style={styles.header}>Investment Opportunities</h1>
-      <ul style={styles.list}>
+      <div style={styles.pageHeader}>
+        <h1 style={styles.header}>Investment Opportunities</h1>
+        <p style={styles.subHeader}>Explore potential investments for your portfolio</p>
+      </div>
+
+      <div style={styles.listContainer}>
         {opportunities.map((opportunity) => (
-          <li key={opportunity.id} style={styles.listItem}>
-            <h2 style={styles.title}>{opportunity.name}</h2>
+          <div key={opportunity.id} style={styles.listItem}>
+            <div style={styles.cardHeader}>
+              <h2 style={styles.title}>{opportunity.name}</h2>
+              <div style={{
+                ...styles.riskBadge,
+                backgroundColor: getRiskColor(opportunity.riskLevel)
+              }}>
+                {opportunity.riskLevel} Risk
+              </div>
+            </div>
+            
             <p style={styles.description}>{opportunity.description}</p>
-            <p style={styles.returnRate}>Expected Return: {opportunity.returnRate}</p>
-            <button style={styles.button} onClick={() => handleInvest(opportunity)}>
-              Invest
-            </button>
-          </li>
+            
+            <div style={styles.detailsGrid}>
+              <div style={styles.detailItem}>
+                <span style={styles.detailLabel}>Founded</span>
+                <span style={styles.detailValue}>{opportunity.foundedYear}</span>
+              </div>
+              <div style={styles.detailItem}>
+                <span style={styles.detailLabel}>Market</span>
+                <span style={styles.detailValue}>{opportunity.market}</span>
+              </div>
+              <div style={styles.detailItem}>
+                <span style={styles.detailLabel}>Funding</span>
+                <span style={styles.detailValue}>${(opportunity.fundingTotal).toLocaleString()}</span>
+              </div>
+              <div style={styles.detailItem}>
+                <span style={styles.detailLabel}>Rounds</span>
+                <span style={styles.detailValue}>{opportunity.fundingRounds}</span>
+              </div>
+            </div>
+            
+            <div style={styles.cardFooter}>
+              <div style={styles.returnRateContainer}>
+                <span style={styles.returnRateLabel}>Expected Return:</span>
+                <span style={styles.returnRateValue}>{opportunity.returnRate}</span>
+              </div>
+              <button style={styles.button} onClick={() => handleInvest(opportunity)}>
+                Analyze Investment
+              </button>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
 
       {isModalVisible && (
         <div style={styles.modalOverlay}>
           <div style={styles.modal}>
-            <div onClick={toggleExplanation} style={{ cursor: 'pointer' }}>
-              {/* Pass message and explanation to Vesty */}
+            <div style={styles.modalHeader}>
+              <h3 style={styles.modalTitle}>Vesty's Analysis</h3>
+              <button style={styles.modalCloseX} onClick={closeModal}>×</button>
+            </div>
+            <div style={styles.modalContent}>
               <Vesty
                 mood={vestyMood}
                 message={vestyMessage}
-                explanation={isExplanationExpanded ? vestyExplanation : ''}
+                explanation={vestyExplanation}
               />
             </div>
-            <button style={styles.closeButton} onClick={closeModal}>
-              Close
-            </button>
           </div>
         </div>
       )}
@@ -135,45 +191,137 @@ const Investment = () => {
 
 const styles = {
   container: {
-    fontFamily: 'Arial, sans-serif',
-    padding: '20px',
+    fontFamily: 'Roboto, Arial, sans-serif',
+    padding: '80px 20px 20px',
+    maxWidth: '1200px',
+    margin: '0 auto',
+    backgroundColor: '#f9f9f9',
+    minHeight: '100vh',
+  },
+  pageHeader: {
+    textAlign: 'center',
+    marginBottom: '40px',
   },
   header: {
-    textAlign: 'center',
-    color: '#333',
+    color: '#2E7D32',
+    fontSize: '2.5rem',
+    marginBottom: '10px',
+    fontWeight: '700',
   },
-  list: {
-    listStyleType: 'none',
-    padding: 0,
+  subHeader: {
+    color: '#666',
+    fontSize: '1.2rem',
+    maxWidth: '600px',
+    margin: '0 auto',
+  },
+  listContainer: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
+    gap: '25px',
+    marginBottom: '30px',
   },
   listItem: {
-    marginBottom: '20px',
-    padding: '15px',
-    border: '1px solid #ddd',
-    borderRadius: '8px',
-    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+    backgroundColor: '#ffffff',
+    borderRadius: '12px',
+    boxShadow: '0 6px 16px rgba(0, 0, 0, 0.08)',
+    overflow: 'hidden',
+    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    border: '1px solid #e0e0e0',
+    '&:hover': {
+      transform: 'translateY(-5px)',
+      boxShadow: '0 12px 24px rgba(0, 0, 0, 0.12)',
+    }
+  },
+  cardHeader: {
+    padding: '20px 20px 15px',
+    borderBottom: '1px solid #f0f0f0',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   title: {
     fontSize: '1.5rem',
-    color: '#4CAF50',
+    color: '#333',
+    margin: 0,
+    fontWeight: '600',
+  },
+  riskBadge: {
+    fontSize: '0.8rem',
+    color: 'white',
+    padding: '4px 10px',
+    borderRadius: '20px',
+    fontWeight: '500',
   },
   description: {
     fontSize: '1rem',
     color: '#555',
+    padding: '15px 20px',
+    margin: 0,
+    lineHeight: '1.5',
+    flex: 1,
   },
-  returnRate: {
+  detailsGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(2, 1fr)',
+    gap: '10px',
+    padding: '0 20px 15px',
+    backgroundColor: '#f9f9f9',
+    borderRadius: '8px',
+    margin: '0 20px 15px',
+  },
+  detailItem: {
+    padding: '10px',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  detailLabel: {
+    fontSize: '0.8rem',
+    color: '#777',
+    marginBottom: '4px',
+  },
+  detailValue: {
     fontSize: '1rem',
-    color: '#888',
+    color: '#333',
+    fontWeight: '500',
+  },
+  cardFooter: {
+    padding: '15px 20px',
+    borderTop: '1px solid #f0f0f0',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#fafafa',
+  },
+  returnRateContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  returnRateLabel: {
+    fontSize: '0.8rem',
+    color: '#777',
+  },
+  returnRateValue: {
+    fontSize: '1.2rem',
+    color: '#2E7D32',
+    fontWeight: '600',
   },
   button: {
-    marginTop: '10px',
-    padding: '10px 15px',
-    fontSize: '1rem',
+    padding: '10px 18px',
+    fontSize: '0.95rem',
     backgroundColor: '#4CAF50',
     color: 'white',
     border: 'none',
-    borderRadius: '5px',
+    borderRadius: '6px',
     cursor: 'pointer',
+    fontWeight: '500',
+    transition: 'background-color 0.2s ease',
+    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+    '&:hover': {
+      backgroundColor: '#3d8b40',
+    }
   },
   modalOverlay: {
     position: 'fixed',
@@ -181,27 +329,91 @@ const styles = {
     left: 0,
     width: '100%',
     height: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    zIndex: 1000,
+    backdropFilter: 'blur(3px)',
   },
   modal: {
     backgroundColor: 'white',
+    borderRadius: '12px',
+    width: '90%',
+    maxWidth: '500px',
+    boxShadow: '0 10px 25px rgba(0, 0, 0, 0.2)',
+    display: 'flex',
+    flexDirection: 'column',
+    maxHeight: '90vh',
+    animation: 'fadeIn 0.3s ease-out',
+    overflow: 'hidden',
+  },
+  modalHeader: {
+    padding: '15px 20px',
+    borderBottom: '1px solid #eee',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#f8f8f8',
+  },
+  modalTitle: {
+    margin: 0,
+    fontSize: '1.3rem',
+    color: '#333',
+  },
+  modalCloseX: {
+    background: 'none',
+    border: 'none',
+    fontSize: '1.5rem',
+    cursor: 'pointer',
+    color: '#777',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '30px',
+    height: '30px',
+    borderRadius: '50%',
+    '&:hover': {
+      backgroundColor: '#f0f0f0',
+    }
+  },
+  modalContent: {
     padding: '20px',
-    borderRadius: '8px',
-    textAlign: 'center',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+    overflowY: 'auto',
+  },
+  modalFooter: {
+    padding: '15px 20px',
+    borderTop: '1px solid #eee',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  toggleButton: {
+    background: 'none',
+    border: 'none',
+    color: '#4CAF50',
+    cursor: 'pointer',
+    padding: '8px 12px',
+    fontSize: '0.9rem',
+    marginTop: '10px',
+    fontWeight: '500',
+    borderRadius: '4px',
+    '&:hover': {
+      backgroundColor: '#f0f0f0',
+    }
   },
   closeButton: {
-    marginTop: '10px',
-    padding: '10px 15px',
+    padding: '10px 20px',
     fontSize: '1rem',
-    backgroundColor: '#f44336',
-    color: 'white',
+    backgroundColor: '#f0f0f0',
+    color: '#333',
     border: 'none',
-    borderRadius: '5px',
+    borderRadius: '6px',
     cursor: 'pointer',
+    fontWeight: '500',
+    transition: 'background-color 0.2s ease',
+    '&:hover': {
+      backgroundColor: '#e0e0e0',
+    }
   },
 };
 

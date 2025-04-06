@@ -56,19 +56,19 @@ const Tamagotchi = () => {
 
   const updateMessageAndExplanation = (investment) => {
     if (investment.quality === 'good') {
-      setVestyMessage(`I'm excited about ${investment.name}!`);
+      setVestyMessage(`Great job with ${investment.name}!`);
       setVestyExplanation(
-        `${investment.name} has a promising return rate of ${investment.returnRate}%. It looks like a solid investment opportunity!`
+        `${investment.name} is performing well with a return rate of ${investment.returnRate}%. It's proving to be a solid investment choice! Keep monitoring its progress to ensure continued success.`
       );
     } else if (investment.quality === 'bad') {
-      setVestyMessage(`I'm worried about ${investment.name}.`);
+      setVestyMessage(`I'm concerned about ${investment.name}.`);
       setVestyExplanation(
-        `${investment.name} has a negative return rate of ${investment.returnRate}%. This might not be a wise investment.`
+        `${investment.name} is underperforming with a negative return rate of ${investment.returnRate}%. This investment might not be yielding the expected results. Consider reviewing your portfolio and deciding whether to hold, sell, or diversify to mitigate risks.`
       );
     } else {
-      setVestyMessage(`I'm thinking about ${investment.name}.`);
+      setVestyMessage(`Let's keep an eye on ${investment.name}.`);
       setVestyExplanation(
-        `${investment.name} has a moderate return rate of ${investment.returnRate}%. It could go either way, so proceed with caution.`
+        `${investment.name} has a moderate return rate of ${investment.returnRate}%. It's neither excelling nor failing, so it might require closer monitoring to determine its long-term potential.`
       );
     }
   };
@@ -77,9 +77,15 @@ const Tamagotchi = () => {
     <div style={styles.container}>
       {/* Vesty Section */}
       <section style={styles.vestySection}>
-        <Vesty mood={vestyMood} message={vestyMessage} explanation={vestyExplanation} />
+        <div style={styles.vestyContainer}>
+          <Vesty mood={vestyMood} /> {/* Only the image is rendered here */}
+          <div style={styles.textContainer}>
+            <p style={styles.message}>{vestyMessage}</p>
+            {vestyExplanation && <p style={styles.explanation}>{vestyExplanation}</p>}
+          </div>
+        </div>
       </section>
-
+  
       {/* Investment Section */}
       <section style={styles.investmentSection}>
         <h2 style={styles.subHeader}>Latest Investments</h2>
@@ -103,7 +109,7 @@ const Tamagotchi = () => {
       </section>
     </div>
   );
-};
+};  
 
 const styles = {
   container: {
@@ -119,12 +125,32 @@ const styles = {
     height: 'calc(50% - 60px)',
     backgroundColor: '#f9f9f9',
     display: 'flex',
-    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     borderBottom: '2px solid #ddd',
     zIndex: 10,
     overflow: 'hidden',
+  },
+  vestyContainer: {
+    display: 'flex',
+    flexDirection: 'row', // Position Vesty and text side by side
+    alignItems: 'center',
+    gap: '20px', // Add space between Vesty and the text
+  },
+  textContainer: {
+    maxWidth: '400px', // Limit the width of the text container
+    textAlign: 'left', // Align text to the left
+  },
+  message: {
+    fontSize: '1.2rem',
+    color: '#333',
+    fontWeight: 'bold', // Make the message bold
+    marginBottom: '10px',
+  },
+  explanation: {
+    fontSize: '1rem',
+    color: '#555',
+    marginTop: '10px',
   },
   investmentSection: {
     position: 'absolute',
